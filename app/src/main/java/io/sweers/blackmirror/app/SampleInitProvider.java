@@ -17,7 +17,7 @@ package io.sweers.blackmirror.app;
 
 import io.sweers.blackmirror.Interceptor;
 import io.sweers.blackmirror.initprovider.pluginized.InitProvider;
-import io.sweers.blackmirror.samples.timing.TimingInterceptor;
+import io.sweers.blackmirror.samples.logging.LoggingInterceptor;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -29,8 +29,11 @@ public class SampleInitProvider extends InitProvider {
 
   @Override public List<? extends Interceptor> interceptors() {
     return asList(
-        //new LoggingInterceptor(),
-        new TimingInterceptor()
+        new LoggingInterceptor()
+        //new TimingInterceptor(),
+        //new RequestSwapper(),
+        //new ResultSwapper(),
+        //new ResultSwapperWithProxy()
         // Add others here
     );
   }

@@ -44,4 +44,5 @@ dependencies {
   implementation project(':initprovider:pluginized')
   implementation project(':samples:logging')
   implementation project(':samples:timing')
+  implementation project(':samples:swapping')
 }
