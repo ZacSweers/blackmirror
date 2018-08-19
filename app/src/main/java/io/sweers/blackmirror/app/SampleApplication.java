@@ -16,12 +16,25 @@
 package io.sweers.blackmirror.app;
 
 import android.app.Application;
-import timber.log.Timber;
+import io.sweers.blackmirror.BlackMirror;
+import java.lang.reflect.Method;
 
 public class SampleApplication extends Application {
 
   @Override public void onCreate() {
     super.onCreate();
-    Timber.plant(new Timber.DebugTree());
+    try {
+      // Example of deferred classloading in application.
+      // Can use BlackMirror.getInstance() directly or getClassLoader() or with the arg
+      // or through getClassLoader(). Do not use Class.forName(String).
+      // You're fine after this though
+      Class<?> clazz = BlackMirror.getInstance()
+          .loadClass("io.sweers.blackmirror.app.AppDelegate");
+      Method method = clazz.getDeclaredMethod("onCreate");
+      method.setAccessible(true);
+      method.invoke(null);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 }
