@@ -37,15 +37,22 @@ import static java.util.Collections.unmodifiableList;
 public final class BlackMirror extends PathClassLoader implements Interceptor {
 
   private static final boolean IS_28 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P;
-  private static BlackMirror INSTANCE;
+  private static BlackMirror instance;
 
-  public static synchronized BlackMirror getInstance(Context context,
-      List<? extends Interceptor> interceptors) {
-    if (INSTANCE == null) {
-      INSTANCE = new BlackMirror(location(context.getPackageManager(), context.getPackageName()),
-          interceptors);
+  private static synchronized void init(Context context, List<? extends Interceptor> interceptors) {
+    instance = new BlackMirror(location(context.getPackageManager(), context.getPackageName()),
+        interceptors);
+  }
+
+  public static synchronized boolean isInstalled() {
+    return instance != null;
+  }
+
+  public static synchronized BlackMirror getInstance() {
+    if (instance == null) {
+      throw new IllegalStateException("Not initialized!");
     }
-    return INSTANCE;
+    return instance;
   }
 
   public static void install(Context context) throws Exception {
@@ -54,7 +61,7 @@ public final class BlackMirror extends PathClassLoader implements Interceptor {
 
   public static void install(Context context, List<? extends Interceptor> interceptors)
       throws Exception {
-    BlackMirror instance = getInstance(context, interceptors);
+    init(context, interceptors);
 
     // Application stuff still ends up going through here?
     Log.d("BlackMirror", "BlackMirror.install - Created hack");
