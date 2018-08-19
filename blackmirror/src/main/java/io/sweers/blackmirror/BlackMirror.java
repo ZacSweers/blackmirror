@@ -21,6 +21,7 @@ import android.content.ContextWrapper;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.util.Log;
 import dalvik.system.PathClassLoader;
 import java.lang.reflect.Field;
@@ -35,6 +36,7 @@ import static java.util.Collections.unmodifiableList;
  */
 public final class BlackMirror extends PathClassLoader implements Interceptor {
 
+  private static final boolean IS_28 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P;
   private static BlackMirror INSTANCE;
 
   public static synchronized BlackMirror getInstance(Context context,
@@ -59,16 +61,19 @@ public final class BlackMirror extends PathClassLoader implements Interceptor {
     Class<?> systemLoader = Class.forName("java.lang.ClassLoader$SystemClassLoader");
     Log.d("BlackMirror", "BlackMirror.install - Found class");
 
-    // TODO this next line no longer works on API 28
-    Field field = systemLoader.getDeclaredField("loader");
-    Log.d("BlackMirror", "BlackMirror.install - Acquired system classloader field");
-    field.set(null, instance);
+    if (!IS_28) {
+      Field field = systemLoader.getDeclaredField("loader");
+      Log.d("BlackMirror", "BlackMirror.install - Acquired system classloader field");
+      field.set(null, instance);
+    }
     Log.d("BlackMirror", "BlackMirror.install - setting system classLoader");
     Thread.currentThread()
         .setContextClassLoader(instance);
-    Log.d("BlackMirror", "BlackMirror.install - set system classLoader successful");
     if (ClassLoader.getSystemClassLoader() != instance) {
-      throw new RuntimeException("DARN");
+      // TODO This doesn't work anymore on API 28
+      Log.d("BlackMirror", "BlackMirror.install - set system classLoader failed");
+    } else {
+      Log.d("BlackMirror", "BlackMirror.install - set system classLoader successful");
     }
 
     // This is the real magic
@@ -78,9 +83,13 @@ public final class BlackMirror extends PathClassLoader implements Interceptor {
     Class<?> baseContextClazz = baseContext.getClass();
 
     try {
-      Field baseCotextClassLoader = baseContextClazz.getDeclaredField("mClassLoader");
-      baseCotextClassLoader.setAccessible(true);
-      baseCotextClassLoader.set(context, instance);
+      Field baseContextClassLoader = baseContextClazz.getDeclaredField("mClassLoader");
+      baseContextClassLoader.setAccessible(true);
+      if (IS_28) {
+        baseContextClassLoader.set(baseContext, instance);
+      } else {
+        baseContextClassLoader.set(context, instance);
+      }
     } catch (NoSuchFieldException e) {
       // DOES NOT WORK ON SAMSUNG 😬🔫
     }
