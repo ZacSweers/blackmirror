@@ -32,11 +32,11 @@ import java.util.List;
  *
  * <p>Based on https://medium.com/@andretietz/auto-initialize-your-android-library-2349daf06920
  */
-public abstract class InitProvider extends ContentProvider {
+public abstract class BlackMirrorInitProvider extends ContentProvider {
 
   public abstract List<? extends Interceptor> interceptors();
 
-  public InitProvider() {}
+  public BlackMirrorInitProvider() {}
 
   @SuppressWarnings("ConstantConditions") @Override public boolean onCreate() {
     try {
@@ -52,7 +52,7 @@ public abstract class InitProvider extends ContentProvider {
 
   @Override public void attachInfo(Context context, ProviderInfo providerInfo) {
     if (providerInfo == null) {
-      throw new NullPointerException(InitProvider.class.getSimpleName()
+      throw new NullPointerException(BlackMirrorInitProvider.class.getSimpleName()
           + " ProviderInfo cannot be null.");
     }
     // So if the authorities equal the library internal ones, the developer forgot to set their

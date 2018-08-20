@@ -27,29 +27,11 @@ import io.sweers.blackmirror.Interceptor;
  * https://android.googlesource.com/platform/art/+/master/runtime/class_linker.cc#2567
  */
 public final class ResultSwapper implements Interceptor {
-  @Override public ClassResult interceptFind(FindChain chain)
-      throws ClassNotFoundException {
-    if (chain.request()
-        .name()
-        .equals("android.widget.TextView")) {
-      return ClassResult.builder()
-          .name(chain.request().name())
-          .clazz(Button.class)
-          .build();
-    }
-    return chain.proceedFind(chain.request());
-  }
 
-  @Override public ClassResult interceptLoad(LoadChain chain, boolean resolve)
-      throws ClassNotFoundException {
-    if (chain.request()
-        .name()
-        .equals("android.widget.TextView")) {
-      return ClassResult.builder()
-          .name(chain.request().name())
-          .clazz(Button.class)
-          .build();
+  @Override public ClassResult intercept(Chain chain) throws ClassNotFoundException {
+    if (chain.request().name().equals("android.widget.TextView")) {
+      return ClassResult.builder().name(chain.request().name()).clazz(Button.class).build();
     }
-    return chain.proceedLoad(chain.request(), resolve);
+    return chain.proceed(chain.request());
   }
 }

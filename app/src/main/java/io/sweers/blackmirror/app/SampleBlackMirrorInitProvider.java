@@ -16,15 +16,15 @@
 package io.sweers.blackmirror.app;
 
 import io.sweers.blackmirror.Interceptor;
-import io.sweers.blackmirror.initprovider.pluginized.InitProvider;
+import io.sweers.blackmirror.initprovider.pluginized.BlackMirrorInitProvider;
 import io.sweers.blackmirror.samples.logging.LoggingInterceptor;
 import java.util.List;
 
 import static java.util.Arrays.asList;
 
-public class SampleInitProvider extends InitProvider {
+public class SampleBlackMirrorInitProvider extends BlackMirrorInitProvider {
 
-  public SampleInitProvider() {
+  public SampleBlackMirrorInitProvider() {
   }
 
   @Override public List<? extends Interceptor> interceptors() {

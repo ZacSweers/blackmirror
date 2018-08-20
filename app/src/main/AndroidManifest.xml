@@ -39,7 +39,7 @@
         android:authorities="${applicationId}.InitProvider"
         android:exported="false"
         android:enabled="true"
-        android:name=".SampleInitProvider"/>
+        android:name=".SampleBlackMirrorInitProvider"/>
   </application>
 
 </manifest>

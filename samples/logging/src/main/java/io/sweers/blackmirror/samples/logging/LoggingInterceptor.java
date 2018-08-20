@@ -21,21 +21,8 @@ import timber.log.Timber;
 
 public final class LoggingInterceptor implements Interceptor {
 
-  @Override public ClassResult interceptFind(FindChain chain) throws ClassNotFoundException {
-    Timber.d(
-        "BlackMirrorV Finding \"%s\"",
-        chain.request()
-            .name());
-    return chain.proceedFind(chain.request());
-  }
-
-  @Override public ClassResult interceptLoad(LoadChain chain, boolean resolve)
-      throws ClassNotFoundException {
-    Timber.d(
-        "BlackMirrorV Loading \"%s\", resolve = %S",
-        chain.request()
-            .name(),
-        resolve);
-    return chain.proceedLoad(chain.request(), resolve);
+  @Override public ClassResult intercept(Chain chain) throws ClassNotFoundException {
+    Timber.tag("BlackMirror").d("Loading \"%s\"", chain.request().name());
+    return chain.proceed(chain.request());
   }
 }

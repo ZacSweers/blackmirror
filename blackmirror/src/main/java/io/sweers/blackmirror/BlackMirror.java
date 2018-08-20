@@ -37,11 +37,14 @@ import static java.util.Collections.unmodifiableList;
 public final class BlackMirror extends PathClassLoader implements Interceptor {
 
   private static final boolean IS_28 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P;
+  private static final boolean IS_27 = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1;
   private static BlackMirror instance;
 
-  private static synchronized void init(Context context, List<? extends Interceptor> interceptors) {
-    instance = new BlackMirror(location(context.getPackageManager(), context.getPackageName()),
-        interceptors);
+  private static synchronized void init(ClassLoader delegate, Context context,
+      List<? extends Interceptor> interceptors) {
+    instance =
+        new BlackMirror(delegate, location(context.getPackageManager(), context.getPackageName()),
+            interceptors);
   }
 
   public static synchronized boolean isInstalled() {
@@ -52,8 +55,7 @@ public final class BlackMirror extends PathClassLoader implements Interceptor {
     if (instance == null) {
       try {
         // This won't actually work. instanceof/class casts fail!
-        return ((BlackMirror) Thread.currentThread()
-            .getContextClassLoader());
+        return ((BlackMirror) Thread.currentThread().getContextClassLoader());
       } catch (Throwable t) {
         throw t;
       }
@@ -67,7 +69,40 @@ public final class BlackMirror extends PathClassLoader implements Interceptor {
 
   public static void install(Context context, List<? extends Interceptor> interceptors)
       throws Exception {
-    init(context, interceptors);
+    // This is the real magic
+    // This is a "ContextImpl"
+    Log.d("BlackMirror", "BlackMirror.install - Reading ContextImpl");
+    Context baseContext = ((ContextWrapper) context.getApplicationContext()).getBaseContext();
+    Class<?> baseContextClazz = baseContext.getClass();
+
+    // LoadedApk is what holds the classloader that all android bits route through
+    Log.d("BlackMirror", "BlackMirror.install - Reading context packageInfo");
+    Field packageInfoField = baseContextClazz.getDeclaredField("mPackageInfo");
+    packageInfoField.setAccessible(true);
+    Log.d("BlackMirror", "BlackMirror.install - Reading LoadedApk");
+    @SuppressLint("PrivateApi") Class<?> loadedApkClazz = Class.forName("android.app.LoadedApk");
+    Log.d("BlackMirror", "BlackMirror.install - Reading LoadedApk.mClassLoader");
+    Field classLoaderField = loadedApkClazz.getDeclaredField("mClassLoader");
+    Log.d("BlackMirror", "BlackMirror.install - Setting LoadedApk.mClassLoader");
+    classLoaderField.setAccessible(true);
+
+    ClassLoader delegate = (ClassLoader) classLoaderField.get(packageInfoField.get(baseContext));
+    init(delegate, context, interceptors);
+
+    classLoaderField.set(packageInfoField.get(baseContext), instance);
+    Log.d("BlackMirror", "BlackMirror.install - Success");
+
+    try {
+      Field baseContextClassLoader = baseContextClazz.getDeclaredField("mClassLoader");
+      baseContextClassLoader.setAccessible(true);
+      if (IS_27) {
+        baseContextClassLoader.set(baseContext, instance);
+      } else {
+        baseContextClassLoader.set(context, instance);
+      }
+    } catch (NoSuchFieldException e) {
+      // DOES NOT WORK ON SAMSUNG 😬🔫
+    }
 
     // Application stuff still ends up going through here?
     Log.d("BlackMirror", "BlackMirror.install - Created hack");
@@ -80,45 +115,13 @@ public final class BlackMirror extends PathClassLoader implements Interceptor {
       field.set(null, instance);
     }
     Log.d("BlackMirror", "BlackMirror.install - setting system classLoader");
-    Thread.currentThread()
-        .setContextClassLoader(instance);
+    Thread.currentThread().setContextClassLoader(instance);
     if (ClassLoader.getSystemClassLoader() != instance) {
       // TODO This doesn't work anymore on API 28
       Log.d("BlackMirror", "BlackMirror.install - set system classLoader failed");
     } else {
       Log.d("BlackMirror", "BlackMirror.install - set system classLoader successful");
     }
-
-    // This is the real magic
-    // This is a "ContextImpl"
-    Log.d("BlackMirror", "BlackMirror.install - Reading ContextImpl");
-    Context baseContext = ((ContextWrapper) context.getApplicationContext()).getBaseContext();
-    Class<?> baseContextClazz = baseContext.getClass();
-
-    try {
-      Field baseContextClassLoader = baseContextClazz.getDeclaredField("mClassLoader");
-      baseContextClassLoader.setAccessible(true);
-      if (IS_28) {
-        baseContextClassLoader.set(baseContext, instance);
-      } else {
-        baseContextClassLoader.set(context, instance);
-      }
-    } catch (NoSuchFieldException e) {
-      // DOES NOT WORK ON SAMSUNG 😬🔫
-    }
-
-    // LoadedApk is what holds the classloader that all android bits route through
-    Log.d("BlackMirror", "BlackMirror.install - Reading context packageInfo");
-    Field packageInfoField = baseContextClazz.getDeclaredField("mPackageInfo");
-    packageInfoField.setAccessible(true);
-    Log.d("BlackMirror", "BlackMirror.install - Reading LoadedApk");
-    @SuppressLint("PrivateApi") Class<?> loadedApkClazz = Class.forName("android.app.LoadedApk");
-    Log.d("BlackMirror", "BlackMirror.install - Reading LoadedApk.mClassLoader");
-    Field classLoaderField = loadedApkClazz.getDeclaredField("mClassLoader");
-    Log.d("BlackMirror", "BlackMirror.install - Setting LoadedApk.mClassLoader");
-    classLoaderField.setAccessible(true);
-    classLoaderField.set(packageInfoField.get(baseContext), instance);
-    Log.d("BlackMirror", "BlackMirror.install - Success");
   }
 
   private static String location(PackageManager pm, String hostPackageName) {
@@ -133,50 +136,29 @@ public final class BlackMirror extends PathClassLoader implements Interceptor {
     throw new RuntimeException("DID NOT FIND OUR PACKAGE LOL");
   }
 
+  private final ClassLoader delegate;
   private final List<Interceptor> interceptors;
 
-  private BlackMirror(String sourceDir, List<? extends Interceptor> interceptors) {
-    super(sourceDir, getSystemClassLoader());
+  private BlackMirror(ClassLoader delegate, String sourceDir,
+      List<? extends Interceptor> interceptors) {
+    super(sourceDir, delegate);
+    this.delegate = delegate;
     List<Interceptor> finalInterceptors = new ArrayList<>(interceptors);
     finalInterceptors.add(this);
     this.interceptors = unmodifiableList(finalInterceptors);
   }
 
-  @Override protected Class<?> findClass(String name) throws ClassNotFoundException {
-    //Log.d("BlackMirror", "BlackMirror.findClass - " + name);
-    ClassRequest request = ClassRequest.builder()
-        .name(name)
-        .build();
-    return new InterceptorChain(interceptors, 0, request).proceedFind(request)
-        .clazz();
-  }
-
   @Override protected Class<?> loadClass(String name, boolean resolve)
       throws ClassNotFoundException {
     //Log.d("BlackMirror", "BlackMirror.loadClass - " + name + " " + resolve);
-    ClassRequest request = ClassRequest.builder()
-        .name(name)
-        .build();
-    return new InterceptorChain(interceptors, 0, request).proceedLoad(request, false)
-        .clazz();
+    ClassRequest request = ClassRequest.builder().name(name).build();
+    return new InterceptorChain(interceptors, 0, request).proceed(request).clazz();
   }
 
-  @Override public ClassResult interceptFind(FindChain chain) throws ClassNotFoundException {
+  @Override public ClassResult intercept(Chain chain) throws ClassNotFoundException {
     return ClassResult.builder()
-        .clazz(super.findClass(chain.request()
-            .name()))
-        .name(chain.request()
-            .name())
-        .build();
-  }
-
-  @Override public ClassResult interceptLoad(LoadChain chain, boolean resolve)
-      throws ClassNotFoundException {
-    return ClassResult.builder()
-        .clazz(super.loadClass(chain.request()
-            .name(), resolve))
-        .name(chain.request()
-            .name())
+        .clazz(delegate.loadClass(chain.request().name()))
+        .name(chain.request().name())
         .build();
   }
 }
