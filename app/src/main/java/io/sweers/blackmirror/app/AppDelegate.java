@@ -22,6 +22,7 @@ import timber.log.Timber;
 public final class AppDelegate {
 
   public static void onCreate() {
+    // This actually doesn't record the same trees as BlackMirror because it has a different static array of trees
     Timber.plant(new Timber.DebugTree());
   }
 }

@@ -22,7 +22,7 @@ import timber.log.Timber;
 public final class LoggingInterceptor implements Interceptor {
 
   @Override public ClassResult interceptFind(FindChain chain) throws ClassNotFoundException {
-    Timber.tag("BlackMirror")
+    Timber.tag("BlackMirrorIntercept")
         .d(
             "Finding \"%s\"",
             chain.request()
@@ -32,7 +32,7 @@ public final class LoggingInterceptor implements Interceptor {
 
   @Override public ClassResult interceptLoad(LoadChain chain, boolean resolve)
       throws ClassNotFoundException {
-    Timber.tag("BlackMirror")
+    Timber.tag("BlackMirrorIntercept")
         .d(
             "Loading \"%s\", resolve = %S",
             chain.request()
