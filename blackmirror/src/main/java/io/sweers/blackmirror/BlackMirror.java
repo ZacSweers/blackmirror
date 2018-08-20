@@ -50,7 +50,13 @@ public final class BlackMirror extends PathClassLoader implements Interceptor {
 
   public static synchronized BlackMirror getInstance() {
     if (instance == null) {
-      throw new IllegalStateException("Not initialized!");
+      try {
+        // This won't actually work. instanceof/class casts fail!
+        return ((BlackMirror) Thread.currentThread()
+            .getContextClassLoader());
+      } catch (Throwable t) {
+        throw t;
+      }
     }
     return instance;
   }
