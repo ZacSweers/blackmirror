@@ -22,28 +22,11 @@ import timber.log.Timber;
 
 public final class TimingInterceptor implements Interceptor {
 
-  @Override public ClassResult interceptFind(FindChain chain) throws ClassNotFoundException {
+  @Override public ClassResult intercept(Chain chain) throws ClassNotFoundException {
     long start = SystemClock.elapsedRealtimeNanos();
-    ClassResult result = chain.proceedFind(chain.request());
+    ClassResult result = chain.proceed(chain.request());
     Timber.tag("BlackMirror")
-        .d(
-            "Finding \"%s\" took %dns",
-            chain.request()
-                .name(),
-            SystemClock.elapsedRealtimeNanos() - start);
-    return result;
-  }
-
-  @Override public ClassResult interceptLoad(LoadChain chain, boolean resolve)
-      throws ClassNotFoundException {
-    long start = SystemClock.elapsedRealtimeNanos();
-    ClassResult result = chain.proceedLoad(chain.request(), resolve);
-    Timber.tag("BlackMirror")
-        .d(
-            "Loading \"%s\", resolve = %S, took %dns",
-            chain.request()
-                .name(),
-            resolve,
+        .d("Loading \"%s\", took %dns", chain.request().name(),
             SystemClock.elapsedRealtimeNanos() - start);
     return result;
   }

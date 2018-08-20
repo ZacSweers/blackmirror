@@ -40,13 +40,16 @@ public class ClassResult {
     return new Builder(this);
   }
 
-  // TODO tostring
+  @Override public String toString() {
+    return "ClassResult{" + "clazz=" + clazz + ", name='" + name + '\'' + '}';
+  }
 
   public static final class Builder {
     private Class<?> clazz;
     private String name;
 
-    private Builder() { }
+    private Builder() {
+    }
 
     private Builder(ClassResult result) {
       this.clazz = result.clazz;

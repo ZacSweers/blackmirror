@@ -30,35 +30,18 @@ import java.lang.reflect.Proxy;
  * Not sure where though
  */
 public final class ResultSwapperWithProxy implements Interceptor {
-  @Override public ClassResult interceptFind(FindChain chain) throws ClassNotFoundException {
-    if (chain.request()
-        .name()
-        .equals("java.util.List")) {
-      ClassResult result = chain.proceedFind(chain.request());
-      return result.toBuilder()
-          .clazz(fakeClass(result.clazz()))
-          .build();
-    }
-    return chain.proceedFind(chain.request());
-  }
 
-  @Override public ClassResult interceptLoad(LoadChain chain, boolean resolve)
-      throws ClassNotFoundException {
-    if (chain.request()
-        .name()
-        .equals("java.util.List")) {
-      ClassResult result = chain.proceedLoad(chain.request(), resolve);
-      return result.toBuilder()
-          .clazz(fakeClass(result.clazz()))
-          .build();
+  @Override public ClassResult intercept(Chain chain) throws ClassNotFoundException {
+    if (chain.request().name().equals("java.util.List")) {
+      ClassResult result = chain.proceed(chain.request());
+      return result.toBuilder().clazz(fakeClass(result.clazz())).build();
     }
-    return chain.proceedLoad(chain.request(), resolve);
+    return chain.proceed(chain.request());
   }
 
   private static Class<?> fakeClass(Class<?> targetClass) {
     return (Class<?>) Proxy.newProxyInstance(targetClass.getClassLoader(),
-        new Class<?>[] { targetClass },
-        new InvocationHandler() {
+        new Class<?>[] { targetClass }, new InvocationHandler() {
           @Override public Object invoke(Object proxy, Method method, @Nullable Object[] args)
               throws Throwable {
             return method.invoke(this, args);

@@ -16,19 +16,12 @@
 package io.sweers.blackmirror;
 
 public interface Interceptor {
-  ClassResult interceptFind(FindChain chain) throws ClassNotFoundException;
 
-  ClassResult interceptLoad(LoadChain chain, boolean resolve) throws ClassNotFoundException;
+  ClassResult intercept(Chain chain) throws ClassNotFoundException;
 
-  interface FindChain {
+  interface Chain {
     ClassRequest request();
 
-    ClassResult proceedFind(ClassRequest request) throws ClassNotFoundException;
-  }
-
-  interface LoadChain {
-    ClassRequest request();
-
-    ClassResult proceedLoad(ClassRequest request, boolean resolve) throws ClassNotFoundException;
+    ClassResult proceed(ClassRequest request) throws ClassNotFoundException;
   }
 }

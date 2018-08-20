@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * A concrete interceptor chain that carries the entire interceptor chain.
  */
-class InterceptorChain implements Interceptor.FindChain, Interceptor.LoadChain {
+class InterceptorChain implements Interceptor.Chain {
   private final List<Interceptor> interceptors;
   private final int index;
   private final ClassRequest request;
@@ -35,7 +35,7 @@ class InterceptorChain implements Interceptor.FindChain, Interceptor.LoadChain {
     return request;
   }
 
-  @Override public ClassResult proceedFind(ClassRequest request) throws ClassNotFoundException {
+  @Override public ClassResult proceed(ClassRequest request) throws ClassNotFoundException {
     if (index >= interceptors.size()) {
       throw new AssertionError("no interceptors added to the chain");
     }
@@ -43,26 +43,7 @@ class InterceptorChain implements Interceptor.FindChain, Interceptor.LoadChain {
     // Call the next interceptor in the chain.
     InterceptorChain next = new InterceptorChain(interceptors, index + 1, request);
     Interceptor interceptor = interceptors.get(index);
-    ClassResult result = interceptor.interceptFind(next);
-
-    // Confirm that the intercepted response isn't null.
-    if (result == null) {
-      throw new NullPointerException("interceptor " + interceptor + " returned null");
-    }
-
-    return result;
-  }
-
-  @Override public ClassResult proceedLoad(ClassRequest request, boolean resolve)
-      throws ClassNotFoundException {
-    if (index >= interceptors.size()) {
-      throw new AssertionError("no interceptors added to the chain");
-    }
-
-    // Call the next interceptor in the chain.
-    InterceptorChain next = new InterceptorChain(interceptors, index + 1, request);
-    Interceptor interceptor = interceptors.get(index);
-    ClassResult result = interceptor.interceptLoad(next, resolve);
+    ClassResult result = interceptor.intercept(next);
 
     // Confirm that the intercepted response isn't null.
     if (result == null) {

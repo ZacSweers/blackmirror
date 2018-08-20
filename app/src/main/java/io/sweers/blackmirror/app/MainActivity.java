@@ -35,19 +35,17 @@ import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Cancellable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subscribers.DisposableSubscriber;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import org.reactivestreams.Publisher;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
@@ -69,16 +67,12 @@ public class MainActivity extends AppCompatActivity {
         new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
     recyclerView.addItemDecoration(decoration);
 
-    // Timber logs are going, but to a different tree! Can't rely on that
-    Flowable.create(new FlowableOnSubscribe<String>() {
-      @Override public void subscribe(final FlowableEmitter<String> emitter) {
+    Flowable<String> logcatDump = Flowable.create(new FlowableOnSubscribe<String>() {
+      @Override public void subscribe(FlowableEmitter<String> emitter) {
         try {
           // Clear first
-          //new ProcessBuilder().command("logcat", "-v", "time")
-          //    .redirectErrorStream(true)
-          //    .start()
-          //    .waitFor();
-          final Process process = new ProcessBuilder().command("logcat", "-v", "time")
+          new ProcessBuilder().command("logcat", "-c").redirectErrorStream(true).start().waitFor();
+          final Process process = new ProcessBuilder().command("logcat", "-d", "-v", "time")
               .redirectErrorStream(true)
               .start();
           emitter.setCancellable(new Cancellable() {
@@ -101,39 +95,47 @@ public class MainActivity extends AppCompatActivity {
           emitter.onError(e);
         }
       }
-    }, BackpressureStrategy.DROP)
-        .filter(new Predicate<String>() {
-          @Override public boolean test(String s) {
-            return s.contains("BlackMirrorV");
-          }
-        })
-        .map(new Function<String, String>() {
-          @Override public String apply(String s) {
-            return s.substring(s.indexOf("BlackMirrorV") + "BlackMirrorV ".length());
-          }
-        })
-        .map(new Function<String, String>() {
-          @Override public String apply(String s) {
-            if (s.contains("resolve =")) {
-              return s.substring(0, s.indexOf("resolve ="));
-            } else {
-              return s;
+    }, BackpressureStrategy.DROP).distinctUntilChanged().filter(new Predicate<String>() {
+      @Override public boolean test(String s) {
+        return s.contains("D/BlackMirror");
+      }
+    });
+
+    Flowable<String> timberLogs = Flowable.create(new FlowableOnSubscribe<String>() {
+      @Override public void subscribe(final FlowableEmitter<String> emitter) {
+        final Timber.Tree tree = new Timber.Tree() {
+          @Override protected void log(int priority, @Nullable String tag, @NotNull String message,
+              @Nullable Throwable t) {
+            if ("BlackMirror".equals(tag)) {
+              emitter.onNext(message);
             }
           }
-        })
-        .subscribeOn(Schedulers.computation())
-        .publish(new Function<Flowable<String>, Publisher<List<String>>>() {
-          @Override public Publisher<List<String>> apply(Flowable<String> stream) {
-            // Debouncing buffer
-            return stream.buffer(stream.debounce(200, TimeUnit.MILLISECONDS));
+        };
+        Timber.plant(tree);
+        emitter.setCancellable(new Cancellable() {
+          @Override public void cancel() {
+            Timber.uproot(tree);
           }
-        })
+        });
+      }
+    }, BackpressureStrategy.DROP);
+
+    Flowable.concat(logcatDump, timberLogs)
+        .subscribeOn(Schedulers.computation())
         .observeOn(AndroidSchedulers.from(Looper.getMainLooper(), true))
-        .as(AutoDispose.<List<String>>autoDisposable(AndroidLifecycleScopeProvider.from(this)))
-        .subscribe(new Consumer<List<String>>() {
-          @Override public void accept(List<String> newLogs) {
-            adapter.append(newLogs);
+        .as(AutoDispose.<String>autoDisposable(AndroidLifecycleScopeProvider.from(this)))
+        .subscribe(new DisposableSubscriber<String>() {
+          @Override public void onNext(String newLog) {
+            adapter.append(newLog);
             recyclerView.scrollToPosition(adapter.getItemCount() - 1);
+          }
+
+          @Override public void onError(Throwable t) {
+            // Noop
+          }
+
+          @Override public void onComplete() {
+
           }
         });
 
@@ -143,8 +145,10 @@ public class MainActivity extends AppCompatActivity {
         // By the time we've gotten here, there's no _new_ class loading to show. But we can
         // Kick some off
         try {
-          Single.just(5)
-              .subscribe();
+          Class.forName("io.reactivex.Single")
+              .getDeclaredMethod("just", Object.class)
+              .invoke(null, 5);
+          //Single.just(5).subscribe();
         } catch (Exception e) {
           Timber.e(e);
         }
@@ -165,8 +169,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override public long getItemId(int position) {
-      return logs.get(0)
-          .hashCode();
+      return logs.get(position).hashCode();
     }
 
     @Override public ItemView onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -188,10 +191,9 @@ public class MainActivity extends AppCompatActivity {
       return logs.size();
     }
 
-    void append(List<String> newLogs) {
-      int originalSize = logs.size();
-      logs.addAll(newLogs);
-      notifyItemRangeInserted(originalSize, logs.size());
+    void append(String newLog) {
+      logs.add(newLog);
+      notifyItemInserted(logs.size() - 1);
     }
   }
 
