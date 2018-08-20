@@ -43,6 +43,7 @@
       android:id="@+id/list"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:scrollbarAlwaysDrawVerticalTrack="true"
       android:padding="@dimen/fab_margin"
       app:layout_behavior="@string/appbar_scrolling_view_behavior"
       />

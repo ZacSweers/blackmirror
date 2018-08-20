@@ -22,6 +22,7 @@ import android.support.v4.text.PrecomputedTextCompat;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -38,12 +39,15 @@ import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Cancellable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import org.reactivestreams.Publisher;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
@@ -60,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
     recyclerView.setLayoutManager(layoutManager);
     final ClassLoaderDisplayAdapter adapter = new ClassLoaderDisplayAdapter();
     recyclerView.setAdapter(adapter);
+
+    DividerItemDecoration decoration =
+        new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+    recyclerView.addItemDecoration(decoration);
 
     // Timber logs are going, but to a different tree! Can't rely on that
     Flowable.create(new FlowableOnSubscribe<String>() {
@@ -94,14 +102,38 @@ public class MainActivity extends AppCompatActivity {
         }
       }
     }, BackpressureStrategy.DROP)
+        .filter(new Predicate<String>() {
+          @Override public boolean test(String s) {
+            return s.contains("BlackMirrorV");
+          }
+        })
+        .map(new Function<String, String>() {
+          @Override public String apply(String s) {
+            return s.substring(s.indexOf("BlackMirrorV") + "BlackMirrorV ".length());
+          }
+        })
+        .map(new Function<String, String>() {
+          @Override public String apply(String s) {
+            if (s.contains("resolve =")) {
+              return s.substring(0, s.indexOf("resolve ="));
+            } else {
+              return s;
+            }
+          }
+        })
         .subscribeOn(Schedulers.computation())
-        .sample(1, TimeUnit.SECONDS)
+        .publish(new Function<Flowable<String>, Publisher<List<String>>>() {
+          @Override public Publisher<List<String>> apply(Flowable<String> stream) {
+            // Debouncing buffer
+            return stream.buffer(stream.debounce(200, TimeUnit.MILLISECONDS));
+          }
+        })
         .observeOn(AndroidSchedulers.from(Looper.getMainLooper(), true))
-        .as(AutoDispose.<String>autoDisposable(AndroidLifecycleScopeProvider.from(this)))
-        .subscribe(new Consumer<String>() {
-          @Override public void accept(String s) {
-            adapter.append(s);
-            //recyclerView.scrollToPosition(adapter.getItemCount() - 1);
+        .as(AutoDispose.<List<String>>autoDisposable(AndroidLifecycleScopeProvider.from(this)))
+        .subscribe(new Consumer<List<String>>() {
+          @Override public void accept(List<String> newLogs) {
+            adapter.append(newLogs);
+            recyclerView.scrollToPosition(adapter.getItemCount() - 1);
           }
         });
 
@@ -143,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override public void onBindViewHolder(ItemView itemView, int i) {
-      String log = logs.get(0);
+      String log = logs.get(i);
       // Pass text computation future to AppCompatTextView,
       // which awaits result before measuring.
       itemView.textView.setTextFuture(PrecomputedTextCompat.getTextFuture(log,
@@ -156,9 +188,10 @@ public class MainActivity extends AppCompatActivity {
       return logs.size();
     }
 
-    void append(String log) {
-      logs.add(log);
-      notifyDataSetChanged();
+    void append(List<String> newLogs) {
+      int originalSize = logs.size();
+      logs.addAll(newLogs);
+      notifyItemRangeInserted(originalSize, logs.size());
     }
   }
 
@@ -169,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
     ItemView(AppCompatTextView textView) {
       super(textView);
       this.textView = textView;
+      textView.setTextSize(12f);
     }
   }
 }

@@ -22,22 +22,20 @@ import timber.log.Timber;
 public final class LoggingInterceptor implements Interceptor {
 
   @Override public ClassResult interceptFind(FindChain chain) throws ClassNotFoundException {
-    Timber.tag("BlackMirrorIntercept")
-        .d(
-            "Finding \"%s\"",
-            chain.request()
-                .name());
+    Timber.d(
+        "BlackMirrorV Finding \"%s\"",
+        chain.request()
+            .name());
     return chain.proceedFind(chain.request());
   }
 
   @Override public ClassResult interceptLoad(LoadChain chain, boolean resolve)
       throws ClassNotFoundException {
-    Timber.tag("BlackMirrorIntercept")
-        .d(
-            "Loading \"%s\", resolve = %S",
-            chain.request()
-                .name(),
-            resolve);
+    Timber.d(
+        "BlackMirrorV Loading \"%s\", resolve = %S",
+        chain.request()
+            .name(),
+        resolve);
     return chain.proceedLoad(chain.request(), resolve);
   }
 }
