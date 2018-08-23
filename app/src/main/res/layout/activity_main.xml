@@ -39,22 +39,28 @@
 
   </android.support.design.widget.AppBarLayout>
 
-  <android.support.v7.widget.RecyclerView
-      android:id="@+id/list"
+  <android.support.v4.widget.NestedScrollView
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:scrollbarAlwaysDrawVerticalTrack="true"
-      android:padding="@dimen/fab_margin"
-      app:layout_behavior="@string/appbar_scrolling_view_behavior"
-      />
-
-  <android.support.design.widget.FloatingActionButton
-      android:id="@+id/fab"
-      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_gravity="bottom|end"
-      android:layout_margin="@dimen/fab_margin"
-      app:srcCompat="@drawable/ic_search_black_24dp"
-      />
+      app:layout_behavior="@string/appbar_scrolling_view_behavior"
+      >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:orientation="vertical">
+
+      <Button
+          android:id="@+id/logcat_button"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="Logcat"
+          />
+
+    </LinearLayout>
+
+
+  </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>
