@@ -29,6 +29,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import com.uber.autodispose.AutoDispose;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 import io.reactivex.BackpressureStrategy;
@@ -40,6 +41,7 @@ import io.reactivex.functions.Cancellable;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
+import io.sweers.blackmirror.spy.Spy;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -146,6 +148,10 @@ public class MainActivity extends AppCompatActivity {
         // Kick some off
         try {
           Timber.d("Clicked");
+          Spy spy = new Spy(MainActivity.this);
+          String hello = spy.sayHello();
+
+          Toast.makeText(MainActivity.this, hello, Toast.LENGTH_SHORT).show();
           Class.forName("io.reactivex.Single")
               .getDeclaredMethod("just", Object.class)
               .invoke(null, 5);
