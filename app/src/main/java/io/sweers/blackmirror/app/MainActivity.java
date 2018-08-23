@@ -41,11 +41,13 @@ import io.reactivex.functions.Cancellable;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
+import io.sweers.blackmirror.spy.Spies;
 import io.sweers.blackmirror.spy.Spy;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import timber.log.Timber;
@@ -150,6 +152,9 @@ public class MainActivity extends AppCompatActivity {
           Timber.d("Clicked");
           Spy spy = new Spy(MainActivity.this);
           String hello = spy.sayHello();
+
+          String buildConfig = Spies.guessBuildConfig(MainActivity.this, "io.sweers.blackmirror.neighbor");
+          Map<String, String> vals = Spies.buildConfigFields(MainActivity.this, "io.sweers.blackmirror.neighbor", buildConfig);
 
           Toast.makeText(MainActivity.this, hello, Toast.LENGTH_SHORT).show();
           Class.forName("io.reactivex.Single")

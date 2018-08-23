@@ -18,9 +18,6 @@ package io.sweers.blackmirror;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
 import dalvik.system.PathClassLoader;
@@ -42,9 +39,7 @@ public final class BlackMirror extends PathClassLoader implements Interceptor {
 
   private static synchronized void init(ClassLoader delegate, Context context,
       List<? extends Interceptor> interceptors) {
-    instance =
-        new BlackMirror(delegate, location(context.getPackageManager(), context.getPackageName()),
-            interceptors);
+    instance = new BlackMirror(delegate, context.getApplicationInfo().sourceDir, interceptors);
   }
 
   public static synchronized boolean isInstalled() {
@@ -122,18 +117,6 @@ public final class BlackMirror extends PathClassLoader implements Interceptor {
     } else {
       Log.d("BlackMirror", "BlackMirror.install - set system classLoader successful");
     }
-  }
-
-  private static String location(PackageManager pm, String hostPackageName) {
-    List<PackageInfo> packages = pm.getInstalledPackages(PackageManager.GET_ACTIVITIES);
-    List<ApplicationInfo> appInfoList = pm.getInstalledApplications(0);
-    for (int x = 0; x < packages.size(); x++) {
-      PackageInfo pkginfo = packages.get(x);
-      if (hostPackageName.equals(pkginfo.packageName)) {
-        return appInfoList.get(x).sourceDir;
-      }
-    }
-    throw new RuntimeException("DID NOT FIND OUR PACKAGE LOL");
   }
 
   private final ClassLoader delegate;
