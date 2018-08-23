@@ -145,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
         // By the time we've gotten here, there's no _new_ class loading to show. But we can
         // Kick some off
         try {
+          Timber.d("Clicked");
           Class.forName("io.reactivex.Single")
               .getDeclaredMethod("just", Object.class)
               .invoke(null, 5);

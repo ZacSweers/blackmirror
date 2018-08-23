@@ -34,14 +34,14 @@ import java.util.List;
  */
 public abstract class BlackMirrorInitProvider extends ContentProvider {
 
-  public abstract List<? extends Interceptor> interceptors();
+  public abstract List<? extends Interceptor> interceptors(Context context);
 
   public BlackMirrorInitProvider() {}
 
   @SuppressWarnings("ConstantConditions") @Override public boolean onCreate() {
     try {
       Log.d("BLAH", "InitProvider.static initializer - ");
-      BlackMirror.install(getContext(), interceptors());
+      BlackMirror.install(getContext(), interceptors(getContext()));
       Log.d("BLAH", "InitProvider.static initializer - Success");
     } catch (Exception e) {
       e.printStackTrace();

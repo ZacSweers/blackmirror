@@ -49,4 +49,5 @@ dependencies {
   implementation project(':samples:logging')
   implementation project(':samples:timing')
   implementation project(':samples:swapping')
+  implementation project(':samples:assets')
 }

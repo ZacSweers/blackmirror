@@ -15,6 +15,7 @@
 
 package io.sweers.blackmirror.app;
 
+import android.content.Context;
 import io.sweers.blackmirror.Interceptor;
 import io.sweers.blackmirror.initprovider.pluginized.BlackMirrorInitProvider;
 import io.sweers.blackmirror.samples.logging.LoggingInterceptor;
@@ -27,13 +28,14 @@ public class SampleBlackMirrorInitProvider extends BlackMirrorInitProvider {
   public SampleBlackMirrorInitProvider() {
   }
 
-  @Override public List<? extends Interceptor> interceptors() {
+  @Override public List<? extends Interceptor> interceptors(Context context) {
     return asList(
         new LoggingInterceptor()
         //new TimingInterceptor(),
         //new RequestSwapper(),
         //new ResultSwapper(),
         //new ResultSwapperWithProxy()
+        //new AssetsInterceptor(context)
         // Add others here
     );
   }
