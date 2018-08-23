@@ -124,7 +124,7 @@ public final class BlackMirror extends PathClassLoader implements Interceptor {
 
   private BlackMirror(ClassLoader delegate, String sourceDir,
       List<? extends Interceptor> interceptors) {
-    super(sourceDir, delegate);
+    super(sourceDir, null);
     this.delegate = delegate;
     List<Interceptor> finalInterceptors = new ArrayList<>(interceptors);
     finalInterceptors.add(this);
