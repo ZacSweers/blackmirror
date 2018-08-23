@@ -16,4 +16,5 @@
 <resources>
   <string name="app_name">blackmirror</string>
   <string name="title_activity_logcat">Logcat</string>
+  <string name="title_activity_assets">Assets</string>
 </resources>

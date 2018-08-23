@@ -51,4 +51,5 @@ dependencies {
   implementation project(':samples:swapping')
   implementation project(':samples:assets')
   implementation project(':samples:spy')
+  compileOnly project(':samples:providedpackaged')
 }

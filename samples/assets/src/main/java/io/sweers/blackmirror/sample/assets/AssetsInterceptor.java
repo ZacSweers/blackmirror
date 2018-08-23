@@ -20,7 +20,8 @@ public final class AssetsInterceptor implements Interceptor {
       constructor.setAccessible(true);
       ByteBuffer[] buffers = new ByteBuffer[1];
 
-      InputStream is = context.getAssets().open("types.dex");
+      // Read the dex file into memory as a bytebuffer
+      InputStream is = context.getAssets().open("providedpackaged.dex");
       ByteArrayOutputStream buffer = new ByteArrayOutputStream();
       int nRead;
       byte[] data = new byte[is.available()];
@@ -31,24 +32,20 @@ public final class AssetsInterceptor implements Interceptor {
       buffer.flush();
       byte[] byteArray = buffer.toByteArray();
       buffers[0] = ByteBuffer.wrap(byteArray);
+
+      // Init the hidden constructor with the bytebuffer
       assetsClassLoader =
           (BaseDexClassLoader) constructor.newInstance(buffers, context.getClassLoader());
-      //Constructor constructor1 = assetsClassLoader.loadClass("Types").getDeclaredConstructors()[0];
-      //constructor1.setAccessible(true);
-      //Object typesInstance = constructor1.newInstance();
-      //Method getStringMethod = assetsClassLoader.loadClass("Types").getDeclaredMethod("returnsString");
-      //getStringMethod.setAccessible(true);
-      //System.out.println(getStringMethod.invoke(typesInstance));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
 
   @Override public ClassResult intercept(Chain chain) throws ClassNotFoundException {
-    if ("Types".equals(chain.request().name())) {
+    if ("packaged.Packaged".equals(chain.request().name())) {
       return ClassResult.builder()
-          .name("Types")
-          .clazz(assetsClassLoader.loadClass("Types"))
+          .name("packaged.Packaged")
+          .clazz(assetsClassLoader.loadClass("packaged.Packaged"))
           .build();
     } else {
       return chain.proceed(chain.request());

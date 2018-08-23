@@ -50,6 +50,15 @@
           android:name="android.support.PARENT_ACTIVITY"
           android:value="io.sweers.blackmirror.app.MainActivity"/>
     </activity>
+    <activity
+        android:name=".AssetsActivity"
+        android:label="@string/title_activity_assets"
+        android:parentActivityName=".MainActivity"
+        android:theme="@style/AppTheme.NoActionBar">
+      <meta-data
+          android:name="android.support.PARENT_ACTIVITY"
+          android:value="io.sweers.blackmirror.app.MainActivity"/>
+    </activity>
   </application>
 
 </manifest>
