@@ -39,42 +39,33 @@
 
   </android.support.design.widget.AppBarLayout>
 
-  <android.support.v4.widget.NestedScrollView
+  <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:layout_margin="@dimen/fab_margin"
+      android:orientation="vertical"
       app:layout_behavior="@string/appbar_scrolling_view_behavior"
       >
 
-    <LinearLayout
+    <Button
+        android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:orientation="vertical">
+        />
 
-      <Button
-          android:id="@+id/logcat_button"
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+
+      <TextView
+          android:id="@+id/text"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="Logcat"
           />
 
-      <Button
-          android:id="@+id/assets_button"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="Assets"
-          />
-
-      <Button
-          android:id="@+id/neighbor_button"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="Neighbor"
-          />
-
-    </LinearLayout>
-
-
-  </android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.NestedScrollView>
+  </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

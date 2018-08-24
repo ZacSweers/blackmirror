@@ -52,24 +52,24 @@
         android:orientation="vertical">
 
       <Button
-          android:id="@+id/logcat_button"
+          android:id="@+id/sayhello_button"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="Logcat"
+          android:text="Say Hello"
           />
 
       <Button
-          android:id="@+id/assets_button"
+          android:id="@+id/spy_button"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="Assets"
+          android:text="Spy"
           />
 
       <Button
-          android:id="@+id/neighbor_button"
+          android:id="@+id/service_button"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:text="Neighbor"
+          android:text="Borrow"
           />
 
     </LinearLayout>

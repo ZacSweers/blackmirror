@@ -59,6 +59,33 @@
           android:name="android.support.PARENT_ACTIVITY"
           android:value="io.sweers.blackmirror.app.MainActivity"/>
     </activity>
+    <activity
+        android:name=".NeighborActivity"
+        android:label="@string/title_activity_assets"
+        android:parentActivityName=".MainActivity"
+        android:theme="@style/AppTheme.NoActionBar">
+      <meta-data
+          android:name="android.support.PARENT_ACTIVITY"
+          android:value="io.sweers.blackmirror.app.MainActivity"/>
+    </activity>
+    <activity
+        android:name=".SayHelloActivity"
+        android:label="@string/title_activity_sayhello"
+        android:parentActivityName=".MainActivity"
+        android:theme="@style/AppTheme.NoActionBar">
+      <meta-data
+          android:name="android.support.PARENT_ACTIVITY"
+          android:value="io.sweers.blackmirror.app.NeighborActivity"/>
+    </activity>
+    <activity
+        android:name=".SpyActivity"
+        android:label="@string/title_activity_spy"
+        android:parentActivityName=".MainActivity"
+        android:theme="@style/AppTheme.NoActionBar">
+      <meta-data
+          android:name="android.support.PARENT_ACTIVITY"
+          android:value="io.sweers.blackmirror.app.NeighborActivity"/>
+    </activity>
   </application>
 
 </manifest>

@@ -17,4 +17,7 @@
   <string name="app_name">blackmirror</string>
   <string name="title_activity_logcat">Logcat</string>
   <string name="title_activity_assets">Assets</string>
+  <string name="title_activity_neighbor">Neighbor</string>
+  <string name="title_activity_sayhello">Say Hello</string>
+  <string name="title_activity_spy">Spy</string>
 </resources>

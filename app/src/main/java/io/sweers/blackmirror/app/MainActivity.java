@@ -33,28 +33,18 @@ public class MainActivity extends AppCompatActivity {
     findViewById(R.id.logcat_button).setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         startActivity(new Intent(MainActivity.this, LogcatActivity.class));
-        //try {
-        //  Timber.d("Clicked");
-        //  Spy spy = new Spy(MainActivity.this);
-        //  String hello = spy.sayHello();
-        //
-        //  String buildConfig = Spies.guessBuildConfig(MainActivity.this, "io.sweers.blackmirror.neighbor");
-        //  Map<String, String> vals = Spies.buildConfigFields(MainActivity.this, "io.sweers.blackmirror.neighbor", buildConfig);
-        //
-        //  Toast.makeText(MainActivity.this, hello, Toast.LENGTH_SHORT).show();
-        //  Class.forName("io.reactivex.Single")
-        //      .getDeclaredMethod("just", Object.class)
-        //      .invoke(null, 5);
-        //  //Single.just(5).subscribe();
-        //} catch (Exception e) {
-        //  Timber.e(e);
-        //}
       }
     });
 
     findViewById(R.id.assets_button).setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         startActivity(new Intent(MainActivity.this, AssetsActivity.class));
+      }
+    });
+
+    findViewById(R.id.neighbor_button).setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        startActivity(new Intent(MainActivity.this, NeighborActivity.class));
       }
     });
   }
