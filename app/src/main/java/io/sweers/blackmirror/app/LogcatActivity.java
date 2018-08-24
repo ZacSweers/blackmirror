@@ -63,8 +63,6 @@ public class LogcatActivity extends AppCompatActivity {
     Flowable<String> logcatDump = Flowable.create(new FlowableOnSubscribe<String>() {
       @Override public void subscribe(FlowableEmitter<String> emitter) {
         try {
-          // Clear first
-          new ProcessBuilder().command("logcat", "-c").redirectErrorStream(true).start().waitFor();
           final Process process = new ProcessBuilder().command("logcat", "-d", "-v", "time")
               .redirectErrorStream(true)
               .start();
