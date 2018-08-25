@@ -27,11 +27,9 @@ public class SampleApplication extends Application {
     try {
       Timber.plant(new Timber.DebugTree());
       // Example of deferred classloading in application.
-      // Can use BlackMirror.getInstance() directly or getClassLoader() or with the arg
-      // or through getClassLoader(). Do not use Class.forName(String).
+      // Can use BlackMirror.getInstance() directly or getClassLoader().
       // You're fine after this though
-      Class<?> clazz = BlackMirror.getInstance()
-          .loadClass("io.sweers.blackmirror.app.AppDelegate");
+      Class<?> clazz = BlackMirror.getInstance().loadClass("io.sweers.blackmirror.app.AppDelegate");
       Method method = clazz.getDeclaredMethod("onCreate");
       method.setAccessible(true);
       method.invoke(null);
