@@ -3,7 +3,7 @@ package io.sweers.blackmirror.sample.assets;
 import android.content.Context;
 import io.sweers.blackmirror.ClassResult;
 import io.sweers.blackmirror.Interceptor;
-import io.sweers.blackmirror.sample.bytebufferutil.ByteBufferUtil;
+import io.sweers.blackmirror.ByteBufferUtil;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 

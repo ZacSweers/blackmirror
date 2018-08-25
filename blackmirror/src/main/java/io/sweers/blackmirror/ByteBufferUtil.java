@@ -1,4 +1,4 @@
-package io.sweers.blackmirror.sample.bytebufferutil;
+package io.sweers.blackmirror;
 
 import dalvik.system.BaseDexClassLoader;
 import java.io.ByteArrayOutputStream;
