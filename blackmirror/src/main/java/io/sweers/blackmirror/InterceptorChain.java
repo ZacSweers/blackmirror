@@ -52,4 +52,15 @@ class InterceptorChain implements Interceptor.Chain {
 
     return result;
   }
+
+  @Override public String toString() {
+    return "InterceptorChain{"
+        + "interceptors="
+        + interceptors
+        + ", index="
+        + index
+        + ", request="
+        + request
+        + '}';
+  }
 }
