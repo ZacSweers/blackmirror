@@ -42,6 +42,12 @@ public class MainActivity extends AppCompatActivity {
       }
     });
 
+    findViewById(R.id.resources_button).setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        startActivity(new Intent(MainActivity.this, ResourcesActivity.class));
+      }
+    });
+
     findViewById(R.id.neighbor_button).setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         startActivity(new Intent(MainActivity.this, NeighborActivity.class));

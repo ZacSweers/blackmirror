@@ -39,7 +39,7 @@ public final class AssetsInterceptor implements Interceptor {
       buffers[0] = ByteBufferUtil.loadBuffer(is);
 
       // Init the hidden constructor with the bytebuffer
-      return ByteBufferUtil.createClassLoaderFromDexFiles(buffers);
+      return ByteBufferUtil.createClassLoaderFromDexFiles(context.getClassLoader(), buffers);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

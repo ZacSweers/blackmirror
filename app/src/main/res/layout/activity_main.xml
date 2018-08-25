@@ -66,6 +66,13 @@
           />
 
       <Button
+          android:id="@+id/resources_button"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="Resources"
+          />
+
+      <Button
           android:id="@+id/neighbor_button"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"

@@ -5,16 +5,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
-import io.sweers.blackmirror.sample.assets.AssetsInterceptor;
+import io.sweers.blackmirror.samples.resources.ResourcesInterceptor;
 import java.lang.reflect.Method;
 
-public class AssetsActivity extends AppCompatActivity {
+public class ResourcesActivity extends AppCompatActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_assets);
     Toolbar toolbar = findViewById(R.id.toolbar);
-    toolbar.setTitle("Assets");
+    toolbar.setTitle("Resources");
     setSupportActionBar(toolbar);
 
     toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -34,7 +34,7 @@ public class AssetsActivity extends AppCompatActivity {
 
     TextView textView = findViewById(R.id.text);
     try {
-      Class<?> packaged = AssetsInterceptor.loadPackaged(this);
+      Class<?> packaged = ResourcesInterceptor.loadPackaged(this);
       Object packagedInstance = packaged.newInstance();
       Method sayHelloMethod = packaged.getDeclaredMethod("sayHello");
       String message = (String) sayHelloMethod.invoke(packagedInstance);
@@ -42,6 +42,5 @@ public class AssetsActivity extends AppCompatActivity {
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
-
   }
 }
