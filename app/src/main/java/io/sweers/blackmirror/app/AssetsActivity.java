@@ -22,7 +22,11 @@ public class AssetsActivity extends AppCompatActivity {
       }
     });
 
-    ((TextView) findViewById(R.id.text)).setText(new Packaged().sayHello());
+    try {
+      ((TextView) findViewById(R.id.text)).setText(new Packaged().sayHello());
+    } catch (NoClassDefFoundError e) {
+      System.out.println(e);
+    }
 
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
   }
