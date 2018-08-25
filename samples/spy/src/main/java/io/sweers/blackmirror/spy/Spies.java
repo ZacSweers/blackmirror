@@ -59,6 +59,13 @@ public final class Spies {
   public static String guessBuildConfig(Context context, String packageName) {
     PathClassLoader classLoader = classLoaderFor(context, packageName);
     try {
+      try {
+        String defaultName = packageName + ".BuildConfig";
+        classLoader.loadClass(defaultName);
+        return defaultName;
+      } catch (Throwable ignored) {
+        // Continue on below
+      }
       DexFile[] dexFiles = dexFiles(classLoader);
       for (DexFile dex : dexFiles) {
         Enumeration<String> entries = dex.entries();
