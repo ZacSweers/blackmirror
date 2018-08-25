@@ -76,9 +76,16 @@ public class SpyActivity extends AppCompatActivity {
               .as(AutoDispose.<Map<String, String>>autoDisposable(
                   AndroidLifecycleScopeProvider.from(SpyActivity.this)))
               .subscribe(new Consumer<Map<String, String>>() {
-                @Override public void accept(Map<String, String> stringStringMap) {
+                @Override public void accept(Map<String, String> buildConfigFields) {
                   dialog.cancel();
-                  ((TextView) findViewById(R.id.text)).setText(stringStringMap.toString());
+                  StringBuilder builder = new StringBuilder();
+                  for (Map.Entry<String, String> entry : buildConfigFields.entrySet()) {
+                    builder.append(entry.getKey())
+                        .append(" = ")
+                        .append(entry.getValue())
+                        .append("\n");
+                  }
+                  ((TextView) findViewById(R.id.text)).setText(builder.toString());
                 }
               });
         } catch (Exception e) {
