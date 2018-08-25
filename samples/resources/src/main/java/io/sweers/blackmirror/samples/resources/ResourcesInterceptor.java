@@ -1,4 +1,4 @@
-package io.sweers.blackmirror.sample.assets;
+package io.sweers.blackmirror.samples.resources;
 
 import android.content.Context;
 import io.sweers.blackmirror.ClassResult;
@@ -6,12 +6,13 @@ import io.sweers.blackmirror.Interceptor;
 import io.sweers.blackmirror.sample.bytebufferutil.ByteBufferUtil;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import sweers.io.blackmirror.samples.resources.R;
 
-public final class AssetsInterceptor implements Interceptor {
+public final class ResourcesInterceptor implements Interceptor {
 
   private final ClassLoader assetsClassLoader;
 
-  public AssetsInterceptor(Context context) {
+  public ResourcesInterceptor(Context context) {
     try {
       assetsClassLoader = loadClassLoader(context);
     } catch (Exception e) {
@@ -35,7 +36,7 @@ public final class AssetsInterceptor implements Interceptor {
       ByteBuffer[] buffers = new ByteBuffer[1];
 
       // Read the dex file into memory as a bytebuffer
-      InputStream is = context.getAssets().open("providedpackaged.dex");
+      InputStream is = context.getResources().openRawResource(R.raw.providedpackaged);
       buffers[0] = ByteBufferUtil.loadBuffer(is);
 
       // Init the hidden constructor with the bytebuffer

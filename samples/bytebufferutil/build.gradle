@@ -23,7 +23,5 @@ android {
 }
 
 dependencies {
-  implementation project(':blackmirror')
-  implementation project(':samples:bytebufferutil')
   implementation 'com.android.support:support-annotations:28.0.0-rc01'
 }
