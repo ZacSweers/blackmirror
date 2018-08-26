@@ -20,5 +20,5 @@ public interface NeighborApi {
   Single<Object> getPrivateInfo();
 
   @POST("createuser")
-  Single<Object> getPrivateInfo(String userId);
+  Single<Object> createUser(String userId);
 }
