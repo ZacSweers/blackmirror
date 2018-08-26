@@ -1,7 +1,6 @@
 package io.sweers.blackmirror.app;
 
 import android.os.Bundle;
-import android.support.v4.text.util.LinkifyCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -89,7 +88,6 @@ public class BorrowServiceActivity extends AppCompatActivity {
               .subscribe(new DisposableSingleObserver<String>() {
                 @Override public void onSuccess(String url) {
                   textView.setText("Success: " + url);
-                  LinkifyCompat.addLinks(textView, 0);
                 }
 
                 @Override public void onError(Throwable e) {
