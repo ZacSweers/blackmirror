@@ -66,7 +66,14 @@
           />
 
       <Button
-          android:id="@+id/service_button"
+          android:id="@+id/service_spy_button"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="Spy Service"
+          />
+
+      <Button
+          android:id="@+id/service_borrow_button"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:text="Borrow"

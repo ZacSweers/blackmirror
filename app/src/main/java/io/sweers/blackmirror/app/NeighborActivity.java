@@ -33,5 +33,15 @@ public class NeighborActivity extends AppCompatActivity {
         startActivity(new Intent(NeighborActivity.this, SpyActivity.class));
       }
     });
+    findViewById(R.id.service_spy_button).setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        startActivity(new Intent(NeighborActivity.this, SpyServiceActivity.class));
+      }
+    });
+    findViewById(R.id.service_borrow_button).setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        startActivity(new Intent(NeighborActivity.this, BorrowServiceActivity.class));
+      }
+    });
   }
 }

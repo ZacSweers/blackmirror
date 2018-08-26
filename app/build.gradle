@@ -20,7 +20,7 @@ android {
   defaultConfig {
     applicationId "io.sweers.blackmirror"
     minSdkVersion 21
-    targetSdkVersion 28
+    targetSdkVersion 27
     versionCode 1
     versionName "1.0"
   }
@@ -42,6 +42,10 @@ dependencies {
   implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
   implementation 'com.uber.autodispose:autodispose:1.0.0-RC2'
   implementation 'com.uber.autodispose:autodispose-android-archcomponents:1.0.0-RC2'
+  implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+  implementation 'com.squareup.retrofit2:converter-moshi:2.4.0'
+  implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+  implementation 'com.serjltt.moshi:moshi-lazy-adapters:2.2'
 
   // BlackMirror deps
   implementation project(':blackmirror')
@@ -50,6 +54,7 @@ dependencies {
   implementation project(':samples:timing')
   implementation project(':samples:swapping')
   implementation project(':samples:assets')
+  implementation project(':samples:resources')
   implementation project(':samples:spy')
   compileOnly project(':samples:providedpackaged')
 }

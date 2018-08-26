@@ -17,6 +17,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="io.sweers.blackmirror.app">
 
+  <uses-permission android:name="android.permission.INTERNET"/>
+
   <application
       android:name=".SampleApplication"
       android:allowBackup="true"
@@ -91,6 +93,24 @@
     <activity
         android:name=".SpyActivity"
         android:label="@string/title_activity_spy"
+        android:parentActivityName=".MainActivity"
+        android:theme="@style/AppTheme.NoActionBar">
+      <meta-data
+          android:name="android.support.PARENT_ACTIVITY"
+          android:value="io.sweers.blackmirror.app.NeighborActivity"/>
+    </activity>
+    <activity
+        android:name=".SpyServiceActivity"
+        android:label="@string/title_activity_spy_service"
+        android:parentActivityName=".MainActivity"
+        android:theme="@style/AppTheme.NoActionBar">
+      <meta-data
+          android:name="android.support.PARENT_ACTIVITY"
+          android:value="io.sweers.blackmirror.app.NeighborActivity"/>
+    </activity>
+    <activity
+        android:name=".BorrowServiceActivity"
+        android:label="@string/title_activity_borrow_service"
         android:parentActivityName=".MainActivity"
         android:theme="@style/AppTheme.NoActionBar">
       <meta-data

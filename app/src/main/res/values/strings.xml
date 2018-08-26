@@ -21,4 +21,6 @@
   <string name="title_activity_neighbor">Neighbor</string>
   <string name="title_activity_sayhello">Say Hello</string>
   <string name="title_activity_spy">Spy</string>
+  <string name="title_activity_spy_service">Spy Service</string>
+  <string name="title_activity_borrow_service">Borrow Service</string>
 </resources>

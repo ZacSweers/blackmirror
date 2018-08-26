@@ -128,4 +128,14 @@ public final class Spies {
       throw new RuntimeException(e);
     }
   }
+
+  public static Class<?> service(Context context, String packageName,
+      String className) {
+    PathClassLoader classLoader = classLoaderFor(context, packageName);
+    try {
+      return classLoader.loadClass(className);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
 }
