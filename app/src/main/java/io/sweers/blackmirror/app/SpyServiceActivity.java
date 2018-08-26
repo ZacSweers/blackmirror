@@ -37,7 +37,7 @@ public class SpyServiceActivity extends AppCompatActivity {
 
           StringBuilder builder = new StringBuilder();
 
-          builder.append(serviceClass.getName()).append("{");
+          builder.append(serviceClass.getName()).append(" {");
           for (Method method : serviceClass.getDeclaredMethods()) {
             builder.append("\n")
                 .append("\t")
