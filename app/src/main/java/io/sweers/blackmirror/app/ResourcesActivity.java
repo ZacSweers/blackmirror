@@ -24,14 +24,6 @@ public class ResourcesActivity extends AppCompatActivity {
     });
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-    // Wasn't quite able to get this working yet, but the idea if that we can have this API
-    // be provided and supply its API impl via BlackMirror later
-    //try {
-    //  ((TextView) findViewById(R.id.text)).setText(new Packaged().sayHello());
-    //} catch (NoClassDefFoundError e) {
-    //  System.out.println(e);
-    //}
-
     TextView textView = findViewById(R.id.text);
     try {
       Class<?> packaged = ResourcesInterceptor.loadPackaged(this);
