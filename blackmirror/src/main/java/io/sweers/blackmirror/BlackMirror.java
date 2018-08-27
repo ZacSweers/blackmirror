@@ -100,7 +100,6 @@ public final class BlackMirror extends PathClassLoader implements Interceptor {
     }
 
     // Application stuff still ends up going through here?
-    Log.d("BlackMirror", "BlackMirror.install - Created hack");
     Class<?> systemLoader = Class.forName("java.lang.ClassLoader$SystemClassLoader");
     Log.d("BlackMirror", "BlackMirror.install - Found class");
 
@@ -110,7 +109,6 @@ public final class BlackMirror extends PathClassLoader implements Interceptor {
       field.set(null, instance);
     }
     Log.d("BlackMirror", "BlackMirror.install - setting system classLoader");
-    Thread.currentThread().setContextClassLoader(instance);
     if (ClassLoader.getSystemClassLoader() != instance) {
       // TODO This doesn't work anymore on API 28
       Log.d("BlackMirror", "BlackMirror.install - set system classLoader failed");
