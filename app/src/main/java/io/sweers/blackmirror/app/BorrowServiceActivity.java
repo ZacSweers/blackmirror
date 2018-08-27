@@ -60,7 +60,8 @@ public class BorrowServiceActivity extends AppCompatActivity {
                   "io.sweers.blackmirror.neighbor.NeighborApi");
 
           Moshi moshi = new Moshi.Builder().add(Wrapped.ADAPTER_FACTORY).build();
-          final Object service = new Retrofit.Builder().baseUrl("https://api.imgur.com/3/")
+          final Object service = new Retrofit.Builder()
+              .baseUrl("https://api.imgur.com/3/")
               .addConverterFactory(MoshiConverterFactory.create(moshi))
               .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
               .build()
