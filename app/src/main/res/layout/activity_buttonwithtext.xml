@@ -67,6 +67,7 @@
           android:linksClickable="true"
           android:autoLink="web"
           android:layout_gravity="center"
+          style="@style/TextAppearance.AppCompat.Display1"
           />
 
     </android.support.v4.widget.NestedScrollView>
