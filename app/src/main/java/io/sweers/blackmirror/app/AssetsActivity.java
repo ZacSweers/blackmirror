@@ -6,7 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 import io.sweers.blackmirror.sample.assets.AssetsHelper;
-import java.lang.reflect.Method;
+import io.sweers.blackmirror.sample.hello.Hello;
 
 public class AssetsActivity extends AppCompatActivity {
 
@@ -26,11 +26,9 @@ public class AssetsActivity extends AppCompatActivity {
 
     TextView textView = findViewById(R.id.text);
     try {
-      Class<?> packaged = AssetsHelper.loadPackaged(this);
-      Object packagedInstance = packaged.newInstance();
-      Method sayHelloMethod = packaged.getDeclaredMethod("sayHello");
-      String message = (String) sayHelloMethod.invoke(packagedInstance);
-      textView.setText(message);
+      Class<?> helloImpl = AssetsHelper.loadHelloImpl(this);
+      Hello instance = (Hello) helloImpl.newInstance();
+      textView.setText(instance.sayHello());
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

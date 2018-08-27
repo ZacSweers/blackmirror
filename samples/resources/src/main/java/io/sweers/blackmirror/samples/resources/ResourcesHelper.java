@@ -13,7 +13,7 @@ public final class ResourcesHelper {
       ByteBuffer[] buffers = new ByteBuffer[1];
 
       // Read the dex file into memory as a bytebuffer
-      InputStream is = context.getResources().openRawResource(R.raw.providedpackaged);
+      InputStream is = context.getResources().openRawResource(R.raw.helloimpl);
       buffers[0] = ByteBufferUtil.loadBuffer(is);
 
       // Init the hidden constructor with the bytebuffer
@@ -23,12 +23,12 @@ public final class ResourcesHelper {
     }
   }
 
-  public static Class<?> loadPackaged(Context context) throws ClassNotFoundException {
+  public static Class<?> loadHelloImpl(Context context) throws ClassNotFoundException {
     ClassLoader cl = loadClassLoader(context);
-    return loadPackaged(cl);
+    return loadHelloImpl(cl);
   }
 
-  public static Class<?> loadPackaged(ClassLoader cl) throws ClassNotFoundException {
-    return cl.loadClass("packaged.Packaged");
+  public static Class<?> loadHelloImpl(ClassLoader cl) throws ClassNotFoundException {
+    return cl.loadClass("io.sweers.blackmirror.sample.helloimpl.HelloImpl");
   }
 }

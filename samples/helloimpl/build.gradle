@@ -13,16 +13,8 @@
  * limitations under the License.
  */
 
-include ':app'
-include ':neighbor'
-include ':blackmirror'
-include ':initprovider:simple'
-include ':initprovider:pluginized'
-include ':samples:logging'
-include ':samples:timing'
-include ':samples:swapping'
-include ':samples:assets'
-include ':samples:resources'
-include ':samples:spy'
-include ':samples:hello'
-include ':samples:helloimpl'
+apply plugin: 'java-library'
+
+dependencies {
+  compileOnly project(':samples:hello')
+}

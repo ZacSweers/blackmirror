@@ -56,5 +56,5 @@ dependencies {
   implementation project(':samples:assets')
   implementation project(':samples:resources')
   implementation project(':samples:spy')
-  compileOnly project(':samples:providedpackaged')
+  implementation project(':samples:hello')
 }
