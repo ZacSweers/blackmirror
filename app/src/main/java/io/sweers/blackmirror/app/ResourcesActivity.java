@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
-import io.sweers.blackmirror.samples.resources.ResourcesInterceptor;
+import io.sweers.blackmirror.samples.resources.ResourcesHelper;
 import java.lang.reflect.Method;
 
 public class ResourcesActivity extends AppCompatActivity {
@@ -26,7 +26,7 @@ public class ResourcesActivity extends AppCompatActivity {
 
     TextView textView = findViewById(R.id.text);
     try {
-      Class<?> packaged = ResourcesInterceptor.loadPackaged(this);
+      Class<?> packaged = ResourcesHelper.loadPackaged(this);
       Object packagedInstance = packaged.newInstance();
       Method sayHelloMethod = packaged.getDeclaredMethod("sayHello");
       String message = (String) sayHelloMethod.invoke(packagedInstance);

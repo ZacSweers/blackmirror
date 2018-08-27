@@ -36,7 +36,6 @@ public class SampleBlackMirrorInitProvider extends BlackMirrorInitProvider {
         //new RequestSwapper(),
         //new ResultSwapper(),
         //new ResultSwapperWithProxy()
-        //new AssetsInterceptor(context)
         // Add others here
     );
   }
