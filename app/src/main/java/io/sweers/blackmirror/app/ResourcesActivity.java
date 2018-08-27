@@ -1,28 +1,16 @@
 package io.sweers.blackmirror.app;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.TextView;
 import io.sweers.blackmirror.sample.hello.Hello;
 import io.sweers.blackmirror.samples.resources.ResourcesHelper;
 
-public class ResourcesActivity extends AppCompatActivity {
+public class ResourcesActivity extends BaseActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_assets);
-    Toolbar toolbar = findViewById(R.id.toolbar);
-    toolbar.setTitle("Resources");
-    setSupportActionBar(toolbar);
-
-    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        finish();
-      }
-    });
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    setUpHeader("Resources");
 
     TextView textView = findViewById(R.id.text);
     try {

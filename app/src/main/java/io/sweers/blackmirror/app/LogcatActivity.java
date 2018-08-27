@@ -4,14 +4,11 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.text.PrecomputedTextCompat;
 import android.support.v4.widget.TextViewCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import com.uber.autodispose.AutoDispose;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
@@ -32,22 +29,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import timber.log.Timber;
 
-public class LogcatActivity extends AppCompatActivity {
+public class LogcatActivity extends BaseActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_logcat);
-    Toolbar toolbar = findViewById(R.id.toolbar);
-    toolbar.setTitle("Logcat");
-    setSupportActionBar(toolbar);
-
-    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        finish();
-      }
-    });
-
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    setUpHeader("Logcat");
 
     final RecyclerView recyclerView = findViewById(R.id.list);
     LinearLayoutManager layoutManager = new LinearLayoutManager(this);

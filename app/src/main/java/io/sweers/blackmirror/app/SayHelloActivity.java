@@ -1,29 +1,17 @@
 package io.sweers.blackmirror.app;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import io.sweers.blackmirror.spy.Spy;
 
-public class SayHelloActivity extends AppCompatActivity {
+public class SayHelloActivity extends BaseActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_buttonwithtext);
-    Toolbar toolbar = findViewById(R.id.toolbar);
-    toolbar.setTitle("Say Hello");
-    setSupportActionBar(toolbar);
-
-    toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        finish();
-      }
-    });
-
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    setUpHeader("Say Hello");
 
     Button button = findViewById(R.id.button);
     button.setText("Say hello");
