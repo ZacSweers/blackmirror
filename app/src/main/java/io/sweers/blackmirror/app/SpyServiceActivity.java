@@ -25,7 +25,7 @@ public class SpyServiceActivity extends BaseActivity {
 
           StringBuilder builder = new StringBuilder();
 
-          builder.append(serviceClass.getName()).append(" {");
+          builder.append("interface ").append(serviceClass.getSimpleName()).append(" {");
           for (Method method : serviceClass.getDeclaredMethods()) {
             builder.append("\n")
                 .append("\t")
