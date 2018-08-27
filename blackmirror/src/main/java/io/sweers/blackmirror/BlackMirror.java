@@ -96,7 +96,7 @@ public final class BlackMirror extends PathClassLoader implements Interceptor {
         baseContextClassLoader.set(context, instance);
       }
     } catch (NoSuchFieldException e) {
-      // DOES NOT WORK ON SAMSUNG 😬🔫
+      // DOES NOT WORK ON SAMSUNG 😬
     }
 
     // Application stuff still ends up going through here?
