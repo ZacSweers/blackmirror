@@ -32,6 +32,7 @@ public final class ByteBufferUtil {
   public static BaseDexClassLoader createClassLoaderFromDexFiles(ClassLoader cl, ByteBuffer... dexFiles)
       throws IllegalAccessException, InvocationTargetException, InstantiationException,
       ClassNotFoundException, NoSuchMethodException {
+    // Init the hidden constructor with the bytebuffer
     Constructor constructor = Class.forName("dalvik.system.BaseDexClassLoader")
         .getConstructor(ByteBuffer[].class, ClassLoader.class);
     constructor.setAccessible(true);

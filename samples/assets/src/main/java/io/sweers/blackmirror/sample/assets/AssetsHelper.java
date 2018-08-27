@@ -15,7 +15,6 @@ public final class AssetsHelper {
       InputStream is = context.getAssets().open("helloimpl.dex");
       buffers[0] = ByteBufferUtil.loadBuffer(is);
 
-      // Init the hidden constructor with the bytebuffer
       return ByteBufferUtil.createClassLoaderFromDexFiles(context.getClassLoader(), buffers);
     } catch (Exception e) {
       throw new RuntimeException(e);
