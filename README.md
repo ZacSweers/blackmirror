@@ -5,10 +5,9 @@ Terrible reflection hacks around classloaders in Android. Sample app from a talk
 
 Slides: https://speakerdeck.com/hzsweers/breaking-the-android-classloader
 
-Core project is `blackmirror`
+Core project is `blackmirror`, which has the `BlackMirror` classloader implementation and some other utilities for working with classloaders and dex files
 
 Examples:
-* `blackmirror` - The main `BlackMirro` impl and some other utilities for working with classloaders and dex files
 * `app` - The main sample app
 * `neighbor` - A simple sibling app with some simple code, used as the target for the main app to run code out of.
 * `initprovider:simple` - demonstrating automatic initialization via init provider (before `Application#onCreate()`)
