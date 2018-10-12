@@ -30,9 +30,6 @@ Icon
 *.apk
 *.ap_
 
-# Files for ART and Dalvik VM
-*.dex
-
 # Java class files
 *.class
 
