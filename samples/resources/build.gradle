@@ -24,5 +24,5 @@ android {
 
 dependencies {
   implementation project(':blackmirror')
-  implementation 'com.android.support:support-annotations:28.0.0-rc01'
+  implementation 'com.android.support:support-annotations:28.0.0'
 }
