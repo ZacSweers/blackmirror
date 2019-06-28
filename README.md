@@ -3,7 +3,7 @@ BlackMirror
 
 Terrible reflection hacks around classloaders in Android. Sample app from a talk given at Droidcon NYC 2018.
 
-Slides: https://speakerdeck.com/hzsweers/breaking-the-android-classloader
+Slides: https://speakerdeck.com/gdglviv/zac-sweers-breaking-the-android-classloader
 
 Core project is `blackmirror`, which has the `BlackMirror` classloader implementation and some other utilities for working with classloaders and dex files
 
